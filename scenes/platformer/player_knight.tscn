@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://b0y5p7q8n3m1x"]
+
+[ext_resource type="Script" path="res://scripts/platformer/player_knight.gd" id="1_player_script"]
+[ext_resource type="Texture2D" path="res://Image SRC/The penitent.png" id="2_penitent_tex"]
+[ext_resource type="Script" path="res://scripts/platformer/hitbox.gd" id="3_hitbox_script"]
+[ext_resource type="Script" path="res://scripts/platformer/hurtbox.gd" id="4_hurtbox_script"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 24.0
+height = 130.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sword"]
+size = Vector2(95, 85)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hurt"]
+radius = 26.0
+height = 130.0
+
+[sub_resource type="Curve" id="Curve_dust"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="PlayerKnight" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player_script")
+
+[node name="BodyCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -65)
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -75)
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("2_penitent_tex")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -70)
+zoom = Vector2(1.2, 1.2)
+limit_left = 0
+limit_top = 0
+limit_bottom = 720
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+
+[node name="AttackPivot" type="Node2D" parent="."]
+
+[node name="AttackHitbox" type="Area2D" parent="AttackPivot"]
+script = ExtResource("3_hitbox_script")
+
+[node name="SwordCollision" type="CollisionShape2D" parent="AttackPivot/AttackHitbox"]
+position = Vector2(55, -65)
+shape = SubResource("RectangleShape2D_sword")
+
+[node name="SlashArc" type="Line2D" parent="AttackPivot"]
+visible = false
+width = 8.0
+default_color = Color(2, 2, 2, 1)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+script = ExtResource("4_hurtbox_script")
+hurtbox_type = 1
+
+[node name="HurtCollision" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -65)
+shape = SubResource("CapsuleShape2D_hurt")
+
+[node name="DustParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 12
+lifetime = 0.35
+one_shot = true
+explosiveness = 0.85
+direction = Vector2(0, -1)
+spread = 60.0
+gravity = Vector2(0, 150)
+initial_velocity_min = 40.0
+initial_velocity_max = 90.0
+scale_amount_min = 2.5
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_dust")
+color = Color(0.65, 0.6, 0.7, 0.7)

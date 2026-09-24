@@ -1,0 +1,252 @@
+[gd_scene format=3 uid="uid://c5q8v2n1m4x3p"]
+
+[ext_resource type="Script" uid="uid://omscjs3dv7g0" path="res://scripts/platformer/stage_01.gd" id="1_stage_script"]
+[ext_resource type="Texture2D" uid="uid://dfq3r4qr8htue" path="res://Image SRC/03_02_exploration_corridor.png" id="2_bg_tex"]
+[ext_resource type="PackedScene" uid="uid://b0y5p7q8n3m1x" path="res://scenes/platformer/player_knight.tscn" id="3_player_scene"]
+[ext_resource type="PackedScene" uid="uid://dmfx80ak3l1pq" path="res://scenes/platformer/player_hud.tscn" id="4_hud_scene"]
+[ext_resource type="Script" uid="uid://b4ekdtg6arngx" path="res://scripts/platformer/destructible_prop.gd" id="5_prop_script"]
+[ext_resource type="Script" uid="uid://fp7pi6prfvlf" path="res://scripts/platformer/hurtbox.gd" id="6_hurtbox_script"]
+[ext_resource type="PackedScene" uid="uid://d1k3f7naa2x8p" path="res://scenes/platformer/chained_sinner.tscn" id="7_sinner_scene"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(3200, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(50, 900)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
+size = Vector2(220, 24)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_platform"]
+bg_color = Color(0.14, 0.11, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.32, 0.48, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prop_box"]
+bg_color = Color(0.2, 0.15, 0.12, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.45, 0.25, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prop_hurt"]
+size = Vector2(60, 80)
+
+[node name="Stage01Catacomb" type="Node2D" unique_id=552933764]
+script = ExtResource("1_stage_script")
+
+[node name="ParallaxBackground" type="CanvasLayer" parent="." unique_id=1960857176]
+layer = -1
+
+[node name="DeepBlack" type="ColorRect" parent="ParallaxBackground" unique_id=1604891245]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.03, 0.05, 1)
+
+[node name="Backdrop" type="TextureRect" parent="." unique_id=614837944]
+offset_left = -100.0
+offset_top = 50.0
+offset_right = 3100.0
+offset_bottom = 600.0
+texture = ExtResource("2_bg_tex")
+stretch_mode = 1
+
+[node name="Vignette" type="ColorRect" parent="." unique_id=311327400]
+offset_left = -100.0
+offset_top = 50.0
+offset_right = 3100.0
+offset_bottom = 600.0
+color = Color(0.03, 0.02, 0.05, 0.45)
+
+[node name="LevelGeometry" type="StaticBody2D" parent="." unique_id=330823125]
+collision_mask = 0
+
+[node name="FloorCollision" type="CollisionShape2D" parent="LevelGeometry" unique_id=1282223778]
+position = Vector2(1500, 625)
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="FloorVisual" type="ColorRect" parent="LevelGeometry" unique_id=329177681]
+offset_left = -100.0
+offset_top = 600.0
+offset_right = 3100.0
+offset_bottom = 720.0
+color = Color(0.1, 0.08, 0.12, 1)
+
+[node name="FloorTrim" type="ColorRect" parent="LevelGeometry" unique_id=1492070229]
+offset_left = -100.0
+offset_top = 600.0
+offset_right = 3100.0
+offset_bottom = 605.0
+color = Color(0.45, 0.32, 0.5, 0.85)
+
+[node name="LeftWall" type="CollisionShape2D" parent="LevelGeometry" unique_id=1015722984]
+position = Vector2(-25, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="CollisionShape2D" parent="LevelGeometry" unique_id=1690305021]
+position = Vector2(3025, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Platform1" type="CollisionShape2D" parent="LevelGeometry" unique_id=1256810321]
+position = Vector2(594, 526)
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="Visual1" type="Panel" parent="LevelGeometry/Platform1" unique_id=141388613]
+offset_left = -109.0
+offset_top = -11.0
+offset_right = 111.0
+offset_bottom = 13.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_platform")
+
+[node name="Platform2" type="CollisionShape2D" parent="LevelGeometry" unique_id=2102877476]
+position = Vector2(900, 380)
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="Visual2" type="Panel" parent="LevelGeometry/Platform2" unique_id=355920850]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_platform")
+
+[node name="Platform3" type="CollisionShape2D" parent="LevelGeometry" unique_id=908743236]
+position = Vector2(1252, 428)
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="Visual3" type="Panel" parent="LevelGeometry/Platform3" unique_id=1205920461]
+offset_left = -111.0
+offset_top = -12.0
+offset_right = 109.0
+offset_bottom = 12.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_platform")
+
+[node name="TutorialHint" type="Label" parent="." unique_id=1970093436]
+offset_left = 135.0
+offset_top = 210.0
+offset_right = 535.0
+offset_bottom = 291.0
+theme_override_colors/font_color = Color(0.8, 0.75, 0.9, 0.9)
+theme_override_font_sizes/font_size = 13
+text = "⚔️ ĐẤU TRƯỜNG THỰC HÀNH CHẶT CHÉM:
+• [J] hoặc Chuột Trái: Combo 3 Nhát Chém
+• [SHIFT]: Lướt Né Thần Tốc (Khung Hình Bất Tử!)
+• [K]: Rạch Máu Hi Sinh  |  [L]: Sám Hối Hồi Máu"
+
+[node name="PropUrn1" type="Node2D" parent="." unique_id=565987287]
+position = Vector2(460, 600)
+script = ExtResource("5_prop_script")
+max_health = 45
+prop_name = "Bình Hài Cốt"
+
+[node name="Visual" type="Panel" parent="PropUrn1" unique_id=1178931466]
+offset_left = -25.0
+offset_top = -65.0
+offset_right = 25.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prop_box")
+
+[node name="Hurtbox" type="Area2D" parent="PropUrn1" unique_id=1192102229]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("6_hurtbox_script")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="PropUrn1/Hurtbox" unique_id=825529149]
+position = Vector2(0, -35)
+shape = SubResource("RectangleShape2D_prop_hurt")
+
+[node name="Label" type="Label" parent="PropUrn1" unique_id=1375178221]
+offset_left = -70.0
+offset_top = -105.0
+offset_right = 70.0
+offset_bottom = -70.0
+theme_override_font_sizes/font_size = 11
+text = "Bình Hài Cốt
+[45 / 45]"
+horizontal_alignment = 1
+
+[node name="PropDummy2" type="Node2D" parent="." unique_id=1038110647]
+position = Vector2(900, 368)
+script = ExtResource("5_prop_script")
+max_health = 75
+prop_name = "Bù Nhìn Rơm Tội Đồ"
+
+[node name="Visual" type="Panel" parent="PropDummy2" unique_id=367982430]
+offset_left = -25.0
+offset_top = -75.0
+offset_right = 25.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prop_box")
+
+[node name="Hurtbox" type="Area2D" parent="PropDummy2" unique_id=1092094589]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("6_hurtbox_script")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="PropDummy2/Hurtbox" unique_id=1385922377]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_prop_hurt")
+
+[node name="Label" type="Label" parent="PropDummy2" unique_id=2144886994]
+offset_left = -80.0
+offset_top = -115.0
+offset_right = 80.0
+offset_bottom = -80.0
+theme_override_font_sizes/font_size = 11
+text = "Bù Nhìn Rơm Tội Đồ
+[75 / 75]"
+horizontal_alignment = 1
+
+[node name="PropUrn3" type="Node2D" parent="." unique_id=537942638]
+position = Vector2(1650, 600)
+script = ExtResource("5_prop_script")
+max_health = 90
+prop_name = "Bia Đá Thánh Thần"
+
+[node name="Visual" type="Panel" parent="PropUrn3" unique_id=1302860866]
+offset_left = -30.0
+offset_top = -80.0
+offset_right = 30.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prop_box")
+
+[node name="Hurtbox" type="Area2D" parent="PropUrn3" unique_id=1314522655]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("6_hurtbox_script")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="PropUrn3/Hurtbox" unique_id=604066392]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_prop_hurt")
+
+[node name="Label" type="Label" parent="PropUrn3" unique_id=928574361]
+offset_left = -80.0
+offset_top = -120.0
+offset_right = 80.0
+offset_bottom = -85.0
+theme_override_font_sizes/font_size = 11
+text = "Bia Đá Thánh Thần
+[90 / 90]"
+horizontal_alignment = 1
+
+[node name="ChainedSinner1" parent="." unique_id=437313026 instance=ExtResource("7_sinner_scene")]
+position = Vector2(1050, 600)
+
+[node name="ChainedSinner2" parent="." unique_id=2123126402 instance=ExtResource("7_sinner_scene")]
+position = Vector2(1950, 600)
+
+[node name="PlayerKnight" parent="." unique_id=1077021528 instance=ExtResource("3_player_scene")]
+position = Vector2(200, 540)
+
+[node name="PlayerHUD" parent="." unique_id=438321960 instance=ExtResource("4_hud_scene")]

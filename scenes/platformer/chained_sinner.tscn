@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://d1k3f7m9a2x8p"]
+
+[ext_resource type="Script" path="res://scripts/platformer/chained_sinner.gd" id="1_sinner_script"]
+[ext_resource type="Texture2D" path="res://Image SRC/chained_sinner_clean.png" id="2_sinner_tex"]
+[ext_resource type="Script" path="res://scripts/platformer/hurtbox.gd" id="3_hurtbox_script"]
+[ext_resource type="Script" path="res://scripts/platformer/hitbox.gd" id="4_hitbox_script"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 22.0
+height = 125.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hurt"]
+radius = 26.0
+height = 125.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chain"]
+size = Vector2(85, 70)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_bg"]
+bg_color = Color(0.12, 0.08, 0.12, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.85, 0.18, 0.18, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sin_bg"]
+bg_color = Color(0.1, 0.08, 0.15, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sin_fill"]
+bg_color = Color(0.95, 0.75, 0.1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="ChainedSinner" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_sinner_script")
+
+[node name="BodyCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -62)
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -70)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_sinner_tex")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+script = ExtResource("3_hurtbox_script")
+hurtbox_type = 0
+
+[node name="HurtCollision" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -62)
+shape = SubResource("CapsuleShape2D_hurt")
+
+[node name="AttackPivot" type="Node2D" parent="."]
+
+[node name="AttackHitbox" type="Area2D" parent="AttackPivot"]
+script = ExtResource("4_hitbox_script")
+hitbox_type = 1
+
+[node name="ChainCollision" type="CollisionShape2D" parent="AttackPivot/AttackHitbox"]
+position = Vector2(-55, -55)
+shape = SubResource("RectangleShape2D_chain")
+
+[node name="ChainArc" type="Line2D" parent="AttackPivot"]
+visible = false
+width = 6.0
+default_color = Color(1.8, 1.2, 0.4, 1)
+
+[node name="OverheadUI" type="Node2D" parent="."]
+position = Vector2(0, -135)
+
+[node name="HpBar" type="ProgressBar" parent="OverheadUI"]
+offset_left = -35.0
+offset_top = -14.0
+offset_right = 35.0
+offset_bottom = -8.0
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+max_value = 80.0
+value = 80.0
+show_percentage = false
+
+[node name="SinBar" type="ProgressBar" parent="OverheadUI"]
+offset_left = -35.0
+offset_top = -7.0
+offset_right = 35.0
+offset_bottom = -2.0
+theme_override_styles/background = SubResource("StyleBoxFlat_sin_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sin_fill")
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="VerdictPrompt" type="Label" parent="OverheadUI"]
+visible = false
+offset_left = -75.0
+offset_top = -42.0
+offset_right = 75.0
+offset_bottom = -16.0
+theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 13
+text = "⚡ [E] TRỪNG PHẠT!"
+horizontal_alignment = 1
+
+[node name="StateLabel" type="Label" parent="OverheadUI"]
+offset_left = -60.0
+offset_top = -1.0
+offset_right = 60.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 0.8)
+theme_override_font_sizes/font_size = 9
+text = "👣 ĐI TUẦN"
+horizontal_alignment = 1
